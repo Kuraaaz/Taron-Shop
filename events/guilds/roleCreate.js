@@ -29,7 +29,7 @@ module.exports = {
         role.guild = guild;
       }
 
-      const logChannelId = '993857352950366290';
+      const logChannelId = '1285800827617017926';
 
       const logChannel = guild.channels.cache.get(logChannelId);
       if (!logChannel) {

@@ -8,7 +8,7 @@ module.exports = {
 
     const removedRoles = oldMember.roles.cache.filter(role => !newMember.roles.cache.has(role.id));
 
-    const logChannelId = '993857352950366290';
+    const logChannelId = '1285800827617017926';
     const logChannel = newMember.guild.channels.cache.get(logChannelId);
     
     if (!logChannel) {

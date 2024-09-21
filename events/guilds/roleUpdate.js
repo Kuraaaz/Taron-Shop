@@ -27,7 +27,7 @@ module.exports = {
       }
 
       // ID du salon de logs (assure-toi de remplacer ceci par le vrai ID)
-      const logChannelId = '993857352950366290';
+      const logChannelId = '1285800827617017926';
 
       // Récupération du salon de logs
       const logChannel = guild.channels.cache.get(logChannelId);
