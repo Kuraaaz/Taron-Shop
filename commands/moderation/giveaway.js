@@ -54,10 +54,11 @@ module.exports = {
     const embed = new MessageEmbed()
       .setTitle(title)
       .setDescription(description)
-      .addField(`Fin du giveaway dans ${ms(convertedTime, { long: true })}`)
+      .addField("Durée", ms(convertedTime, { long: true }) || "Non spécifiée", true)
       .addField("Nombre de participants", "0", true) // Initialisé à 0, sera mis à jour plus tard
-      .addField("Nombre de gagnants", numberOfWinners.toString(), true)
+      .addField("Nombre de gagnants", numberOfWinners ? numberOfWinners.toString() : "Non spécifié", true)
       .setColor("c806d6")
+      .setFooter({ text: `Fin du giveaway dans ${ms(convertedTime, { long: true })}` })
       .setTimestamp();
 
     const row = new MessageActionRow()
