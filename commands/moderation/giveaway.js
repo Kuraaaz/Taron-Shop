@@ -47,7 +47,7 @@ module.exports = {
     const embed = new MessageEmbed()
       .setTitle(title)
       .setDescription(description)
-      .setColor(getRandomColor())
+      .setColor("c806d6")
       .setFooter({ text: `Fin du giveaway dans ${ms(convertedTime, { long: true })}` })
       .setTimestamp();
 
