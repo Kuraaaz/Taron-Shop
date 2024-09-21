@@ -28,7 +28,7 @@ module.exports = {
         return;
       }
 
-      const logChannelId = '1286939470989492224';
+      const logChannelId = '1285800827617017926';
 
       const logChannel = guild.channels.cache.get(logChannelId);
       if (!logChannel) {

@@ -14,7 +14,7 @@ module.exports = {
         return;
       }
 
-      if (message.member.permissions.has('ADMINISTRATOR', process.env.MODO_ROLE)) return;
+      if (message.member.permissions.has('ADMINISTRATOR', process.env.VALIDLINKS_ROLE)) return;
 
       if (!process.env.GUILD_ID) {
         console.log('La variable d\'environnement GUILD_ID n\'est pas définie.');
