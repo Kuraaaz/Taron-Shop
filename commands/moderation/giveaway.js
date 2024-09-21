@@ -6,9 +6,9 @@ module.exports = {
   category: "fun",
   permissions: ["ADMINISTRATOR"],
   ownerOnly: false,
-  usage: "giveaway [title] [description] [duration]",
-  examples: ["giveaway 'Super Giveaway' 'Gagne un prix!' '10m'"],
-  description: "Crée un giveaway avec un titre, une description et une durée",
+  usage: "giveaway [title] [description] [duration] [number_of_winners]",
+  examples: ["giveaway 'Super Giveaway' 'Gagne un prix!' '10m' 1"],
+  description: "Crée un giveaway avec un titre, une description, une durée et le nombre de gagnants",
   options: [
     {
       name: "title",
@@ -28,11 +28,18 @@ module.exports = {
       type: "STRING",
       required: true,
     },
+    {
+      name: "number_of_winners",
+      description: "Le nombre de gagnants",
+      type: "INTEGER",
+      required: true,
+    },
   ],
   async runInteraction(client, interaction, guildSettings) {
     const title = interaction.options.getString("title");
     const description = interaction.options.getString("description");
     const duration = interaction.options.getString("duration");
+    const numberOfWinners = interaction.options.getInteger("number_of_winners");
 
     // Vérifiez si la durée est valide
     if (!duration || typeof duration !== 'string' || duration.trim() === '') {
@@ -47,8 +54,10 @@ module.exports = {
     const embed = new MessageEmbed()
       .setTitle(title)
       .setDescription(description)
+      .addField(`Fin du giveaway dans ${ms(convertedTime, { long: true })}`)
+      .addField("Nombre de participants", "0", true) // Initialisé à 0, sera mis à jour plus tard
+      .addField("Nombre de gagnants", numberOfWinners.toString(), true)
       .setColor("c806d6")
-      .setFooter({ text: `Fin du giveaway dans ${ms(convertedTime, { long: true })}` })
       .setTimestamp();
 
     const row = new MessageActionRow()
@@ -78,6 +87,10 @@ module.exports = {
         if (!participants.includes(buttonInteraction.user.id)) {
           participants.push(buttonInteraction.user.id);
           await buttonInteraction.reply({ content: "Vous avez été ajouté au giveaway!", ephemeral: true });
+
+          // Mettre à jour le nombre de participants dans l'embed
+          embed.fields[1].value = participants.length.toString();
+          await message.edit({ embeds: [embed] });
         } else {
           await buttonInteraction.reply({ content: "Vous participez déjà au giveaway!", ephemeral: true });
         }
@@ -89,32 +102,21 @@ module.exports = {
       }
     });
 
-    collector.on('collect', async (buttonInteraction) => {
-        if (buttonInteraction.replied || buttonInteraction.deferred) return;
-      
-        if (buttonInteraction.customId === 'giveaway-participate') {
-          if (!participants.includes(buttonInteraction.user.id)) {
-            participants.push(buttonInteraction.user.id);
-            await buttonInteraction.reply({ content: "Vous avez été ajouté au giveaway!", ephemeral: true });
-          } else {
-            await buttonInteraction.reply({ content: "Vous participez déjà au giveaway!", ephemeral: true });
-          }
-        } else if (buttonInteraction.customId === 'giveaway-view') {
-          const participantsList = participants.length > 0 
-            ? participants.map(id => `<@${id}>`).join('\n')
-            : "Aucun participant pour l'instant.";
-          await buttonInteraction.reply({ content: `Participants:\n${participantsList}`, ephemeral: true });
-        }
-      });
-      
-      collector.on('end', async () => {
-        if (participants.length === 0) {
-          await interaction.followUp({ content: "Personne n'a participé au giveaway.", components: [] });
-          return;
-        }
-      
+    collector.on('end', async () => {
+      if (participants.length === 0) {
+        await interaction.followUp({ content: "Personne n'a participé au giveaway.", components: [] });
+        return;
+      }
+
+      const winners = [];
+      for (let i = 0; i < Math.min(numberOfWinners, participants.length); i++) {
         const winnerId = participants[Math.floor(Math.random() * participants.length)];
-        await interaction.followUp({ content: `Félicitations à <@${winnerId}>! Tu as gagné le giveaway! ``${description}```, components: [] });
-      });           
+        winners.push(winnerId);
+        participants.splice(participants.indexOf(winnerId), 1); // Supprime le gagnant de la liste
+      }
+
+      const winnersList = winners.map(id => `<@${id}>`).join(', ');
+      await interaction.followUp({ content: `Félicitations à ${winnersList}! Vous avez gagné le giveaway!`, components: [] });
+    });
   },
 };
