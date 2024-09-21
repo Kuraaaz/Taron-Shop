@@ -41,21 +41,20 @@ module.exports = {
     const duration = interaction.options.getString("duration");
     const numberOfWinners = interaction.options.getInteger("number_of_winners");
 
-    // Vérifiez si la durée est valide
     if (!duration || typeof duration !== 'string' || duration.trim() === '') {
       return interaction.reply({ content: "Veuillez spécifier une durée valide!", ephemeral: true });
     }
 
     const convertedTime = ms(duration);
     if (!convertedTime || convertedTime <= 0) {
-      return interaction.reply({ content: "Spécifier une durée valide!", ephemeral: true });
+      return interaction.reply({ content: "Spécifiez une durée valide!", ephemeral: true });
     }
 
     const embed = new MessageEmbed()
       .setTitle(title)
       .setDescription(description)
       .addField("Durée", ms(convertedTime, { long: true }) || "Non spécifiée", true)
-      .addField("Nombre de participants", "0", true) // Initialisé à 0, sera mis à jour plus tard
+      .addField("Nombre de participants", "0", true)
       .addField("Nombre de gagnants", numberOfWinners ? numberOfWinners.toString() : "Non spécifié", true)
       .setColor("c806d6")
       .setFooter({ text: `Fin du giveaway dans ${ms(convertedTime, { long: true })}` })
@@ -89,7 +88,6 @@ module.exports = {
           participants.push(buttonInteraction.user.id);
           await buttonInteraction.reply({ content: "Vous avez été ajouté au giveaway!", ephemeral: true });
 
-          // Mettre à jour le nombre de participants dans l'embed
           embed.fields[1].value = participants.length.toString();
           await message.edit({ embeds: [embed] });
         } else {
@@ -113,10 +111,17 @@ module.exports = {
       for (let i = 0; i < Math.min(numberOfWinners, participants.length); i++) {
         const winnerId = participants[Math.floor(Math.random() * participants.length)];
         winners.push(winnerId);
-        participants.splice(participants.indexOf(winnerId), 1); // Supprime le gagnant de la liste
+        participants.splice(participants.indexOf(winnerId), 1);
       }
 
       const winnersList = winners.map(id => `<@${id}>`).join(', ');
+
+      embed.fields[0].value = "Giveaway terminé";
+      embed.fields[1].name = "Gagnant(s) :";
+      embed.fields[1].value = winnersList;
+      embed.setFooter({ text: "Giveaway terminé" });
+
+      await message.edit({ embeds: [embed], components: [] });
       await interaction.followUp({ content: `Félicitations à ${winnersList}! Vous avez gagné le giveaway!`, components: [] });
     });
   },

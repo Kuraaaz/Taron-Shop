@@ -2,7 +2,7 @@ const { MessageEmbed } = require('discord.js');
 
 module.exports = {
   name: "givend",
-  category: "fun",
+  category: "utils",
   permissions: ["ADMINISTRATOR"],
   ownerOnly: false,
   usage: "giveaway end [messageId]",
