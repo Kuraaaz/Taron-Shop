@@ -1,6 +1,6 @@
 const Logger = require("../../utils/Logger");
 
-const moderatorRoleId = "992456669617475645";
+const moderatorRoleId = "1286110956601999380";
 const messageLimit = 6;
 const banKickLimit = 4;
 const messageTimeFrame = 4000;

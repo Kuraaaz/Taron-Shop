@@ -6,7 +6,7 @@ module.exports = {
   async execute(client, member) {
     const fetchGuild = await client.getGuild(member.guild);
 
-    const autoRoleId = "992895701740703785";
+    const autoRoleId = "1285755684943564841";
 
     try {
       const role = member.guild.roles.cache.get(autoRoleId);
