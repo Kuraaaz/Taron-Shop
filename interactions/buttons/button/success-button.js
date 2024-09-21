@@ -1,6 +1,7 @@
 module.exports = {
-  name: "success-button",
+  name: "giveaway-participate",
   async runInteraction(client, interaction) {
-    await interaction.reply({ content: "Je suis le bouton success!" });
-  }
+    // Utilisation de deferReply pour donner plus de temps au traitement
+    await interaction.reply({ ephemeral: true });
+  },
 };
