@@ -1,0 +1,46 @@
+# Logs
+*.log
+# Dependency directories
+node_modules/
+dist
+
+### vscode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+*.code-workspace
+
+# Cache file creation bug
+.yarn/cache/*
+.yarn/sdks/eslint/*
+.yarn/sdks/prettier/*
+.yarn/install-state.gz
+.yarn/build-state.url
+.yarn/releases.gz
+
+### yarn ###
+# https://yarnpkg.com/advanced/qa#which-files-should-be-gitignored
+
+.pnp.*
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+!.yarn/cache
+
+# Config file (credentials)
+options.ts
+package-lock.json
+yarn.lock
+/src/commands/admin
+/src/commands/embed
+TODO.md
+/commands/admin
+.env
+
+# Other
+doc.json
