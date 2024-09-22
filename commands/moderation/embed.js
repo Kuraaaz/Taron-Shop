@@ -64,6 +64,42 @@ module.exports = {
       required: false,
     },
     {
+      name: "descriptiontitle5",
+      description: "Titre pour la quatrième description (facultatif)",
+      type: "STRING",
+      required: false,
+    },
+    {
+      name: "description5",
+      description: "Quatrième description (facultative, max 100 caractères)",
+      type: "STRING",
+      required: false,
+    },
+    {
+      name: "descriptiontitle6",
+      description: "Titre pour la quatrième description (facultatif)",
+      type: "STRING",
+      required: false,
+    },
+    {
+      name: "description6",
+      description: "Quatrième description (facultative, max 100 caractères)",
+      type: "STRING",
+      required: false,
+    },
+    {
+      name: "descriptiontitle7",
+      description: "Titre pour la quatrième description (facultatif)",
+      type: "STRING",
+      required: false,
+    },
+    {
+      name: "description7",
+      description: "Quatrième description (facultative, max 100 caractères)",
+      type: "STRING",
+      required: false,
+    },
+    {
       name: "image",
       description: "URL de l'image",
       type: "STRING",
@@ -86,45 +122,46 @@ module.exports = {
     const description3 = interaction.options.getString("description3");
     const descriptionTitle4 = interaction.options.getString("descriptiontitle4");
     const description4 = interaction.options.getString("description4");
+    const descriptionTitle5 = interaction.options.getString("descriptiontitle5");
+    const description5 = interaction.options.getString("description5");
+    const descriptionTitle6 = interaction.options.getString("descriptiontitle6");
+    const description6 = interaction.options.getString("description6");
+    const descriptionTitle7 = interaction.options.getString("descriptiontitle7");
+    const description7 = interaction.options.getString("description7");
     const imageUrl = interaction.options.getString("image");
     const thumbnailUrl = interaction.options.getString("thumbnail");
 
-    // Validation de la couleur hexadécimale
     const isValidHexColor = /^#[0-9A-F]{6}$/i.test(color);
     if (!isValidHexColor) {
       return interaction.reply({ content: "La couleur doit être un code hex valide (ex: #ff0000).", ephemeral: true });
     }
 
-    // Validation des longueurs de descriptions (max 100 caractères)
-    if (description1.length > 100 || (description2 && description2.length > 100) || (description3 && description3.length > 100) || (description4 && description4.length > 100)) {
+    if (description1.length > 100 || (description2 && description2.length > 100) || (description3 && description3.length > 100) || (description4 && description4.length > 100) || (description5 && description5.length > 100) || (description6 && description6.length > 100) || (description7 && description7.length > 100)) {
       return interaction.reply({ content: "Chaque description doit être de 100 caractères ou moins.", ephemeral: true });
     }
 
-    // Création de l'embed
     const embed = new MessageEmbed()
       .setTitle(title)
-      .setDescription(description1) // Première description obligatoire
+      .setDescription(description1)
       .setColor(color);
 
-    // Ajout facultatif de descriptions supplémentaires avec leurs titres
     if (descriptionTitle2 && description2) embed.addField(descriptionTitle2, description2);
     if (descriptionTitle3 && description3) embed.addField(descriptionTitle3, description3);
     if (descriptionTitle4 && description4) embed.addField(descriptionTitle4, description4);
+    if (descriptionTitle5 && description5) embed.addField(descriptionTitle5, description5);
+    if (descriptionTitle6 && description6) embed.addField(descriptionTitle6, description6);
+    if (descriptionTitle7 && description7) embed.addField(descriptionTitle7, description7);
 
-    // Ajout facultatif de l'image
     if (imageUrl) {
       embed.setImage(imageUrl);
     }
 
-    // Ajout facultatif du thumbnail
     if (thumbnailUrl) {
       embed.setThumbnail(thumbnailUrl);
     }
 
-    // Envoi de l'embed
     await interaction.channel.send({ embeds: [embed] });
 
-    // Supprime le message d'appel de la commande
     await interaction.deleteReply();
   },
 };
