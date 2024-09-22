@@ -52,6 +52,18 @@ module.exports = {
       required: false,
     },
     {
+      name: "descriptiontitle4",
+      description: "Titre pour la quatrième description (facultatif)",
+      type: "STRING",
+      required: false,
+    },
+    {
+      name: "description4",
+      description: "Quatrième description (facultative, max 100 caractères)",
+      type: "STRING",
+      required: false,
+    },
+    {
       name: "image",
       description: "URL de l'image",
       type: "STRING",
@@ -72,6 +84,8 @@ module.exports = {
     const description2 = interaction.options.getString("description2");
     const descriptionTitle3 = interaction.options.getString("descriptiontitle3");
     const description3 = interaction.options.getString("description3");
+    const descriptionTitle4 = interaction.options.getString("descriptiontitle4");
+    const description4 = interaction.options.getString("description4");
     const imageUrl = interaction.options.getString("image");
     const thumbnailUrl = interaction.options.getString("thumbnail");
 
@@ -82,7 +96,7 @@ module.exports = {
     }
 
     // Validation des longueurs de descriptions (max 100 caractères)
-    if (description1.length > 100 || (description2 && description2.length > 100) || (description3 && description3.length > 100)) {
+    if (description1.length > 100 || (description2 && description2.length > 100) || (description3 && description3.length > 100) || (description4 && description4.length > 100)) {
       return interaction.reply({ content: "Chaque description doit être de 100 caractères ou moins.", ephemeral: true });
     }
 
@@ -95,6 +109,7 @@ module.exports = {
     // Ajout facultatif de descriptions supplémentaires avec leurs titres
     if (descriptionTitle2 && description2) embed.addField(descriptionTitle2, description2);
     if (descriptionTitle3 && description3) embed.addField(descriptionTitle3, description3);
+    if (descriptionTitle4 && description4) embed.addField(descriptionTitle4, description4);
 
     // Ajout facultatif de l'image
     if (imageUrl) {
@@ -107,6 +122,9 @@ module.exports = {
     }
 
     // Envoi de l'embed
-    await interaction.reply({ embeds: [embed] });
+    await interaction.channel.send({ embeds: [embed] });
+
+    // Supprime le message d'appel de la commande
+    await interaction.deleteReply();
   },
 };
